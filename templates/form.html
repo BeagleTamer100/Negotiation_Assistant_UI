@@ -1,0 +1,82 @@
+<div class="form-wrapper">
+    <form action="/submit" method="post">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <h1>Johnson and Johnson Negotiation Assistant</h1>
+        <div class="form-container">
+
+            <div class="form-group">
+                <label for="subcategory">Subcategory:</label>
+                <select id="subcategory" name="subcategory">
+                    {% for sub in subcategory_list %}
+                    <option value="{{ sub }}">{{ sub }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="region">Region:</label>
+                <select name="region">
+                    {% for option in dropdown_options.get("region", []) %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sourcing_stage">Sourcing Stage:</label>
+                <select name="sourcing_stage">
+                    {% for option in dropdown_options.get("sourcing_stage", []) %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="contract_due_date">Final Contract Due Date:</label>
+                <select name="contract_due_date">
+                    {% for option in dropdown_options.get("contract_due_date", []) %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="financial_impact">What is the financial impact of this RFP subcategory?</label>
+                <select name="financial_impact">
+                    {% for option in dropdown_options.get("financial_impact", []) %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="supply_risk">What is the supply risk of this subcategory?</label>
+                <select name="supply_risk">
+                    {% for option in dropdown_options.get("supply_risk", []) %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="market_volatility">How volatile is the market? (1 = Stable, 5 = Highly Volatile)</label>
+                <select name="market_volatility">
+                    {% for option in dropdown_options.get("market_volatility", []) %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="supplier_dependency">How dependent are you on few suppliers? (1 = Many Options, 5 = Single Source)</label>
+                <select name="supplier_dependency">
+                    {% for option in dropdown_options.get("supplier_dependency", []) %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Generate Strategy</button>
+        </div>
+    </form>
+</div>

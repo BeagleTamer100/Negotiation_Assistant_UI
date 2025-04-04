@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Negotiation Strategy Output</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 20px 60px;
+            background-color: #f8f9fb;
+            color: #1a1a1a;
+        }
+        h1, h2 {
+            color: #20232a;
+        }
+        .tabs {
+            display: flex;
+            margin-top: 20px;
+            border-bottom: 2px solid #ccc;
+        }
+        .tab-button {
+            padding: 12px 20px;
+            cursor: pointer;
+            background-color: #e9ecef;
+            border: none;
+            border-right: 1px solid #ccc;
+            font-weight: 500;
+            color: #333;
+        }
+        .tab-button.active {
+            background-color: #ffffff;
+            border-bottom: 2px solid #007bff;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .section-label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border-left: 4px solid #007bff;
+            padding-left: 10px;
+            color: #007bff;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f1f3f5;
+            color: #333;
+            font-weight: bold;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .kraljic-matrix {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .matrix-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            background-color: #ccc;
+            padding: 2px;
+        }
+        
+        .quadrant {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #f5f5f5;
+            position: relative;
+            font-weight: bold;
+        }
+        
+        .strategic {
+            background-color: #ffebee;
+        }
+        
+        .bottleneck {
+            background-color: #fff3e0;
+        }
+        
+        .leverage {
+            background-color: #e8f5e9;
+        }
+        
+        .non-critical {
+            background-color: #e3f2fd;
+        }
+        
+        .quadrant.active {
+            border: 2px solid #2196F3;
+        }
+        
+        .star {
+            position: absolute;
+            font-size: 24px;
+            color: #2196F3;
+            animation: pulse 2s infinite;
+        }
+        
+        .x-axis, .y-axis {
+            position: absolute;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .x-axis {
+            bottom: -25px;
+            right: 0;
+        }
+        
+        .y-axis {
+            transform: rotate(-90deg);
+            transform-origin: left top;
+            left: -25px;
+            top: 100%;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .force-visualization {
+            margin: 20px 0;
+        }
+        
+        .force-item {
+            margin-bottom: 15px;
+        }
+        
+        .force-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .force-scale {
+            display: flex;
+            height: 30px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .scale-label {
+            position: absolute;
+            top: -20px;
+            font-size: 0.8em;
+            color: #666;
+        }
+        
+        .scale-label.low { left: 0; }
+        .scale-label.low-med { left: 25%; }
+        .scale-label.med { left: 50%; }
+        .scale-label.med-high { left: 75%; }
+        .scale-label.high { right: 0; }
+        
+        .force-level {
+            height: 100%;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+        }
+        
+        .force-level.low { width: 20%; }
+        .force-level.low-med { width: 40%; }
+        .force-level.med { width: 60%; }
+        .force-level.med-high { width: 80%; }
+        .force-level.high { width: 100%; }
+        
+        .force-level::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tabs">
+    <button class="tab-button active" onclick="openTab(event, 'summary')">Input Summary</button>
+    <button class="tab-button" onclick="openTab(event, 'market')">Market Dynamics</button>
+    <button class="tab-button" onclick="openTab(event, 'strategy')">Category Strategy</button>
+    <button class="tab-button" onclick="openTab(event, 'pricing')">Pricing Models</button>
+    <button class="tab-button" onclick="openTab(event, 'levers')">Negotiation Levers</button>
+    <button class="tab-button" onclick="openTab(event, 'contracts')">Contract Types</button>
+    <button class="tab-button" onclick="openTab(event, 'ratecard')">Rate Card Predictor</button>
+    <!-- <button class="tab-button" onclick="openTab(event, 'sources')">Sources</button> -->
+</div>
+
+<a href="/" style="display:inline-block; margin: 20px 0 0 0; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">← Edit Inputs</a>
+
+<div id="summary" class="tab-content active">
+    <section>
+        <div class="section-label">Input Summary</div>
+        <p><strong>Subcategory:</strong> {{ subcategory }}</p>
+        <p><strong>Region:</strong> {{ region }}</p>
+        <p><strong>Sourcing Stage:</strong> {{ sourcing_stage }}</p>
+        <p><strong>Contract Due Date:</strong> {{ contract_due_date }}</p>
+        <p><strong>Financial Impact:</strong> {{ financial_impact }}</p>
+        <p><strong>Supply Risk:</strong> {{ supply_risk }}</p>
+        <p><strong>Market Volatility:</strong> {{ market_volatility }}</p>
+        <p><strong>Supplier Dependency:</strong> {{ supplier_dependency }}</p>
+    </section>
+</div>
+
+
+<div id="market" class="tab-content">
+    <div class="body-text">
+        For <b>{{ subcategory }}</b> in <b>{{ region }}</b>, the Porter's Five Forces dynamics were pulled from J&J's AmplifiPro Market Intelligence Resource.
+    <br> <br> <br>
+    </div>
+
+    <section>
+        <div class="section-label">Porter's Five Forces</div>
+        <div class="force-visualization">
+            {% for force, level in force_levels.items() %}
+            <div class="force-item">
+                <div class="force-label">{{ force }}</div>
+                <div class="force-scale">
+                    <div class="scale-label low">Low</div>
+                    <div class="scale-label low-med">Low-Med</div>
+                    <div class="scale-label med">Med</div>
+                    <div class="scale-label med-high">Med-High</div>
+                    <div class="scale-label high">High</div>
+                    <div class="force-level {{ level.lower() }}"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    <br> <br>
+    <section>
+        <div class="section-label">Market Dynamics Advice</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Porter Force</th>
+                    <th>Level</th>
+                    <th>Advice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in market_advice %}
+                <tr>
+                    <td>{{ item.force }}</td>
+                    <td>{{ item.level }}</td>
+                    <td>{{ item.advice }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+
+<div id="pricing" class="tab-content">
+    <section>
+        <div class="section-label">Recommended Pricing Models</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pricing Model</th>
+                    <th>Benefit / Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pricing_advice %}
+                <tr>
+                    <td>{{ item['Consider this pricing model..'] }}</td>
+                    <td>{{ item['Benefit/Use:'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+
+<div id="levers" class="tab-content">
+    <section>
+        <div class="section-label">Recommended Negotiation Levers</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Advice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in levers_advice %}
+                <tr>
+                    <td>{{ item['Subject'] }}</td>
+                    <td>{{ item['Advice'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+
+<div id="strategy" class="tab-content">
+    <div class="body-text">
+        Based on the user's input, the following Kraljic Quadrant was determined: <b>{{ kraljic_quadrant }}</b>. <br><br>
+        The following category strategy recommendations were made based on this Kraljic Quadrant. <br> <br>
+    </div>
+
+    <!-- Add Kraljic Matrix Visualization -->
+    <div class="kraljic-matrix">
+        <div class="matrix-container">
+            <div class="quadrant strategic {{ 'active' if kraljic_quadrant == 'Strategic' }}">
+                Strategic
+                {% if kraljic_quadrant == 'Strategic' %}
+                <span class="star">★</span>
+                {% endif %}
+            </div>
+            <div class="quadrant bottleneck {{ 'active' if kraljic_quadrant == 'Bottleneck' }}">
+                Bottleneck
+                {% if kraljic_quadrant == 'Bottleneck' %}
+                <span class="star">★</span>
+                {% endif %}
+            </div>
+            <div class="quadrant leverage {{ 'active' if kraljic_quadrant == 'Leverage' }}">
+                Leverage
+                {% if kraljic_quadrant == 'Leverage' %}
+                <span class="star">★</span>
+                {% endif %}
+            </div>
+            <div class="quadrant non-critical {{ 'active' if kraljic_quadrant == 'Non-Critical' }}">
+                Non-Critical
+                {% if kraljic_quadrant == 'Non-Critical' %}
+                <span class="star">★</span>
+                {% endif %}
+            </div>
+            <div class="y-axis">Supply Risk →</div>
+            <div class="x-axis">Financial Impact →</div>
+        </div>
+    </div>
+
+    <section>
+        <div class="section-label">Category Strategy Recommendations</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Focus on..</th>
+                    <th>Recommended Actions</th>
+                    <th>Risk Mitigation Advice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in strategy_advice %}
+                <tr>
+                    <td>{{ item['Focus on..'] }}</td>
+                    <td>{{ item['Recommended Actions'] }}</td>
+                    <td>{{ item['Risk Mitigation Advice'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+
+<div id="contracts" class="tab-content">
+    <section>
+        <div class="section-label">Recommended Contract Types</div>
+        <ul>
+            {% for item in contract_advice %}
+            <li>{{ item['Advice'] }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+
+<div id="ratecard" class="tab-content">
+    <section>
+        <div class="section-label">Rate Card Predictor (Coming Soon)</div>
+    </section>
+</div>
+
+<div id="sources" class="tab-content">
+    <section>
+        <div class="section-label">Sources and References</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Resource</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Market Dynamics</td><td>{{ market_resource }}</td></tr>
+                <tr><td>Category Strategy</td><td>{{ strategy_resource }}</td></tr>
+                <tr><td>Pricing Models</td><td>{{ pricing_resource }}</td></tr>
+                <tr><td>Negotiation Levers</td><td>{{ levers_resource }}</td></tr>
+                <tr><td>Contract Types</td><td>{{ contracts_resource }}</td></tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tabbuttons;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+    }
+    tabbuttons = document.getElementsByClassName("tab-button");
+    for (i = 0; i < tabbuttons.length; i++) {
+        tabbuttons[i].classList.remove("active");
+    }
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
+</script>
+
+</body>
+</html>
