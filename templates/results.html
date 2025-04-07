@@ -338,32 +338,32 @@
     <!-- Add Kraljic Matrix Visualization -->
     <div class="kraljic-matrix">
         <div class="matrix-container">
-            <div class="quadrant strategic {{ 'active' if kraljic_quadrant == 'Strategic' }}">
-                Strategic
-                {% if kraljic_quadrant == 'Strategic' %}
+            <div class="quadrant leverage {{ 'active' if kraljic_quadrant == 'Leverage items' }}">
+                Leverage items
+                {% if kraljic_quadrant == 'Leverage items' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="quadrant bottleneck {{ 'active' if kraljic_quadrant == 'Bottleneck' }}">
-                Bottleneck
-                {% if kraljic_quadrant == 'Bottleneck' %}
+            <div class="quadrant strategic {{ 'active' if kraljic_quadrant == 'Strategic items' }}">
+                Strategic items
+                {% if kraljic_quadrant == 'Strategic items' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="quadrant leverage {{ 'active' if kraljic_quadrant == 'Leverage' }}">
-                Leverage
-                {% if kraljic_quadrant == 'Leverage' %}
+            <div class="quadrant non-critical {{ 'active' if kraljic_quadrant == 'Non-critical items' }}">
+                Non-critical items
+                {% if kraljic_quadrant == 'Non-critical items' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="quadrant non-critical {{ 'active' if kraljic_quadrant == 'Non-Critical' }}">
-                Non-Critical
-                {% if kraljic_quadrant == 'Non-Critical' %}
+            <div class="quadrant bottleneck {{ 'active' if kraljic_quadrant == 'Bottleneck items' }}">
+                Bottleneck items
+                {% if kraljic_quadrant == 'Bottleneck items' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="y-axis">Supply Risk →</div>
-            <div class="x-axis">Financial Impact →</div>
+            <div class="y-axis">Profit impact →</div>
+            <div class="x-axis">Risk / Complexity →</div>
         </div>
     </div>
 
