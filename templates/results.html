@@ -86,6 +86,8 @@
             gap: 2px;
             background-color: #ccc;
             padding: 2px;
+            margin-left: 50px;
+            margin-bottom: 30px;
         }
         
         .quadrant {
@@ -124,24 +126,62 @@
             font-size: 24px;
             color: #2196F3;
             animation: pulse 2s infinite;
+            left: 50%;
+            top: 50%;
+            transform: translate(
+                calc((var(--supply-risk) - 5.5) * 40px),
+                calc((5.5 - var(--strategic-importance)) * 40px)
+            );
         }
         
         .x-axis, .y-axis {
             position: absolute;
             color: #666;
             font-size: 0.9em;
+            font-weight: bold;
         }
         
         .x-axis {
+            bottom: -30px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .x-axis-label {
+            position: absolute;
             bottom: -25px;
+        }
+
+        .x-axis-label.low {
+            left: 0;
+        }
+
+        .x-axis-label.high {
             right: 0;
         }
         
         .y-axis {
             transform: rotate(-90deg);
             transform-origin: left top;
+            left: -45px;
+            top: 50%;
+            white-space: nowrap;
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        .y-axis-label {
+            position: absolute;
             left: -25px;
-            top: 100%;
+        }
+
+        .y-axis-label.low {
+            bottom: 0;
+        }
+
+        .y-axis-label.high {
+            top: 0;
         }
         
         @keyframes pulse {
@@ -206,13 +246,180 @@
             width: 2px;
             background-color: #fff;
         }
+
+        /* Half Circle Progress Bar Styles */
+        .score-container {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            gap: 10px;
+        }
+
+        .score-label {
+            flex: none;
+            padding-right: 0;
+        }
+
+        .progress-bar {
+            position: relative;
+            width: 100px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            left: 0;
+            background-color: #1a1a1a;  /* Match text color */
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            color: #1a1a1a;
+            min-width: 40px;  /* Ensure consistent width for the score text */
+        }
+
+        .score-list {
+            margin-left: 0;
+            max-width: 800px;
+        }
+
+        /* Replace strategic and risk specific colors with text color */
+        .strategic-score .progress-fill,
+        .risk-score .progress-fill {
+            background-color: #1a1a1a;
+        }
+
+        #rate-prediction-form {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .form-column {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .form-column h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #rate-prediction-form .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        #rate-prediction-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        #rate-prediction-form select,
+        #rate-prediction-form input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .predict-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .predict-button:hover {
+            background-color: #0056b3;
+        }
+
+        #prediction-result {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .predicted-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .help-text {
+            display: block;
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 2px;
+        }
+
+        .mape-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .china-predictions {
+            margin-top: 40px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .china-predictions table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .china-predictions th {
+            position: sticky;
+            top: 0;
+            background-color: #f1f3f5;
+            z-index: 1;
+        }
+
+        .china-predictions th,
+        .china-predictions td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .china-predictions tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .china-predictions .rate {
+            text-align: right;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
 
 <div class="tabs">
-    <button class="tab-button active" onclick="openTab(event, 'summary')">Input Summary</button>
-    <button class="tab-button" onclick="openTab(event, 'market')">Market Dynamics</button>
+    <button class="tab-button active" onclick="openTab(event, 'market')">Market Dynamics</button>
     <button class="tab-button" onclick="openTab(event, 'strategy')">Category Strategy</button>
     <button class="tab-button" onclick="openTab(event, 'pricing')">Pricing Models</button>
     <button class="tab-button" onclick="openTab(event, 'levers')">Negotiation Levers</button>
@@ -223,22 +430,26 @@
 
 <a href="/" style="display:inline-block; margin: 20px 0 0 0; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">← Edit Inputs</a>
 
-<div id="summary" class="tab-content active">
+<div id="market" class="tab-content active">
     <section>
-        <div class="section-label">Input Summary</div>
+        <div class="section-label">Summary</div>
+        <p>{{ market_summary }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Input Used</div>
         <p><strong>Subcategory:</strong> {{ subcategory }}</p>
         <p><strong>Region:</strong> {{ region }}</p>
-        <p><strong>Sourcing Stage:</strong> {{ sourcing_stage }}</p>
-        <p><strong>Contract Due Date:</strong> {{ contract_due_date }}</p>
-        <p><strong>Financial Impact:</strong> {{ financial_impact }}</p>
-        <p><strong>Supply Risk:</strong> {{ supply_risk }}</p>
-        <p><strong>Market Volatility:</strong> {{ market_volatility }}</p>
-        <p><strong>Supplier Dependency:</strong> {{ supplier_dependency }}</p>
     </section>
-</div>
+    <br>
 
+    <section>
+        <div class="section-label">Resources Used</div>
+        <p>{{ market_resource }}</p>
+    </section>
+    <br>
 
-<div id="market" class="tab-content">
     <div class="body-text">
         For <b>{{ subcategory }}</b> in <b>{{ region }}</b>, the Porter's Five Forces dynamics were pulled from J&J's AmplifiPro Market Intelligence Resource.
     <br> <br> <br>
@@ -263,6 +474,7 @@
         </div>
     </section>
     <br> <br>
+
     <section>
         <div class="section-label">Market Dynamics Advice</div>
         <table>
@@ -288,6 +500,24 @@
 
 <div id="pricing" class="tab-content">
     <section>
+        <div class="section-label">Summary</div>
+        <p>{{ pricing_summary }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Input Used</div>
+        <p><strong>Subcategory:</strong> {{ subcategory }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Resources Used</div>
+        <p>{{ pricing_resource }}</p>
+    </section>
+    <br>
+
+    <section>
         <div class="section-label">Recommended Pricing Models</div>
         <table>
             <thead>
@@ -310,6 +540,24 @@
 
 <div id="levers" class="tab-content">
     <section>
+        <div class="section-label">Summary</div>
+        <p>{{ levers_summary }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Input Used</div>
+        <p><strong>Subcategory:</strong> {{ subcategory }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Resources Used</div>
+        <p>{{ levers_resource }}</p>
+    </section>
+    <br>
+
+    <section>
         <div class="section-label">Recommended Negotiation Levers</div>
         <table>
             <thead>
@@ -331,45 +579,141 @@
 </div>
 
 <div id="strategy" class="tab-content">
-    <div class="body-text">
-        Based on the user's input, the following Kraljic Quadrant was determined: <b>{{ kraljic_quadrant }}</b>. <br><br>
-    </div>
+    <section>
+        <div class="section-label">Summary</div>
+        <p>{{ strategy_summary }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Input Used</div>
+        <h4>Strategic Importance Questions:</h4>
+        <div class="score-list">
+            <div class="score-container">
+                <div class="score-label">High proportion of annual purchasing volume:</div>
+                <div class="progress-bar strategic-score">
+                    <div class="progress-fill" style="width: {{ (strategic_scores[0] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(strategic_scores[0]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">High priority to management:</div>
+                <div class="progress-bar strategic-score">
+                    <div class="progress-fill" style="width: {{ (strategic_scores[1] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(strategic_scores[1]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">End customer recognizes quality:</div>
+                <div class="progress-bar strategic-score">
+                    <div class="progress-fill" style="width: {{ (strategic_scores[2] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(strategic_scores[2]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">More important than most other parts:</div>
+                <div class="progress-bar strategic-score">
+                    <div class="progress-fill" style="width: {{ (strategic_scores[3] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(strategic_scores[3]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">More important than most other projects:</div>
+                <div class="progress-bar strategic-score">
+                    <div class="progress-fill" style="width: {{ (strategic_scores[4] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(strategic_scores[4]) }}/7</div>
+            </div>
+        </div>
+
+        <h4>Supply Risk Questions:</h4>
+        <div class="score-list">
+            <div class="score-container">
+                <div class="score-label">Alternative suppliers available (reverse scored):</div>
+                <div class="progress-bar risk-score">
+                    <div class="progress-fill" style="width: {{ (risk_scores[0] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(risk_scores[0]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">Price stability (reverse scored):</div>
+                <div class="progress-bar risk-score">
+                    <div class="progress-fill" style="width: {{ (risk_scores[1] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(risk_scores[1]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">Geopolitical factors (reverse scored):</div>
+                <div class="progress-bar risk-score">
+                    <div class="progress-fill" style="width: {{ (risk_scores[2] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(risk_scores[2]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">Cost structure transparency (reverse scored):</div>
+                <div class="progress-bar risk-score">
+                    <div class="progress-fill" style="width: {{ (risk_scores[3] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(risk_scores[3]) }}/7</div>
+            </div>
+            <div class="score-container">
+                <div class="score-label">Volume commitments influence:</div>
+                <div class="progress-bar risk-score">
+                    <div class="progress-fill" style="width: {{ (risk_scores[4] / 7 * 100) }}%"></div>
+                </div>
+                <div class="progress-text">{{ "%d"|format(risk_scores[4]) }}/7</div>
+            </div>
+        </div>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Resources Used</div>
+        <p>{{ strategy_resource }}</p>
+    </section>
+    <br>
 
     <!-- Add Kraljic Matrix Visualization -->
     <div class="kraljic-matrix">
-        <div class="matrix-container">
-            <div class="quadrant leverage {{ 'active' if kraljic_quadrant == 'Leverage items' }}">
-                Leverage items
-                {% if kraljic_quadrant == 'Leverage items' %}
+        <h3>Kraljic Matrix Position</h3>
+        <div class="matrix-container" style="--supply-risk: {{ supply_risk }}; --strategic-importance: {{ strategic_importance }};">
+            <div class="quadrant leverage {{ 'active' if kraljic_quadrant == 'Leverage' }}">
+                Leverage
+                {% if kraljic_quadrant == 'Leverage' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="quadrant strategic {{ 'active' if kraljic_quadrant == 'Strategic items' }}">
-                Strategic items
-                {% if kraljic_quadrant == 'Strategic items' %}
+            <div class="quadrant strategic {{ 'active' if kraljic_quadrant == 'Strategic' }}">
+                Strategic
+                {% if kraljic_quadrant == 'Strategic' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="quadrant non-critical {{ 'active' if kraljic_quadrant == 'Non-critical items' }}">
-                Non-critical items
-                {% if kraljic_quadrant == 'Non-critical items' %}
+            <div class="quadrant non-critical {{ 'active' if kraljic_quadrant == 'Non-Critical' }}">
+                Non-Critical
+                {% if kraljic_quadrant == 'Non-Critical' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="quadrant bottleneck {{ 'active' if kraljic_quadrant == 'Bottleneck items' }}">
-                Bottleneck items
-                {% if kraljic_quadrant == 'Bottleneck items' %}
+            <div class="quadrant bottleneck {{ 'active' if kraljic_quadrant == 'Bottleneck' }}">
+                Bottleneck
+                {% if kraljic_quadrant == 'Bottleneck' %}
                 <span class="star">★</span>
                 {% endif %}
             </div>
-            <div class="y-axis">Profit impact →</div>
-            <div class="x-axis">Risk / Complexity →</div>
+            <div class="y-axis">Strategic Importance</div>
+            <div class="y-axis-label low">Low</div>
+            <div class="y-axis-label high">High</div>
+            <div class="x-axis">Supply Risk</div>
+            <div class="x-axis-label low">Low</div>
+            <div class="x-axis-label high">High</div>
         </div>
     </div>
 
     <div class="body-text">
-        The following category strategy recommendations were made based on this Kraljic Quadrant. <br> <br>
+        Based on the Kraljic Matrix analysis for <b>{{ subcategory }}</b>, the following category strategy recommendations were made:
     </div>
+    <br>
 
     <section>
         <div class="section-label">Category Strategy Recommendations</div>
@@ -396,6 +740,24 @@
 
 <div id="contracts" class="tab-content">
     <section>
+        <div class="section-label">Summary</div>
+        <p>{{ contracts_summary }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Input Used</div>
+        <p><strong>Subcategory:</strong> {{ subcategory }}</p>
+    </section>
+    <br>
+
+    <section>
+        <div class="section-label">Resources Used</div>
+        <p>{{ contracts_resource }}</p>
+    </section>
+    <br>
+
+    <section>
         <div class="section-label">Recommended Contract Types</div>
         <ul>
             {% for item in contract_advice %}
@@ -407,8 +769,124 @@
 
 <div id="ratecard" class="tab-content">
     <section>
-        <div class="section-label">Rate Card Predictor (Coming Soon)</div>
+        <div class="section-label">Rate Card Predictor</div>
+        <p>Enter the details below to predict the rate card value for {{ current_year }}. The model is trained on historical data and uses economic indicators to predict hourly rates.</p>
     </section>
+    <br>
+
+    <form id="rate-prediction-form" onsubmit="predictRate(event)">
+        <div class="form-column">
+            <h3>Position of Interest</h3>
+            <div class="form-group">
+                <label for="supplier">Supplier:</label>
+                <select id="supplier" name="supplier" required>
+                    <option value="">Select Supplier</option>
+                    {% for supplier in unique_suppliers %}
+                    <option value="{{ supplier }}">{{ supplier }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                    <option value="">Select Role</option>
+                    {% for role in unique_roles %}
+                    <option value="{{ role }}">{{ role }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Experience Level:</label>
+                <select id="experience" name="experience" required>
+                    <option value="">Select Experience</option>
+                    <option value="Junior">Junior</option>
+                    <option value="Senior">Senior</option>
+                    <option value="Expert">Expert</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country" required>
+                    <option value="">Select Country</option>
+                    {% for country in unique_countries %}
+                    <option value="{{ country }}">{{ country }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-column">
+            <h3>2025 Market Conditions</h3>
+            <div class="form-group">
+                <label for="delta_ppi">Delta PPI (Producer Price Index Change):</label>
+                <input type="number" id="delta_ppi" name="delta_ppi" step="0.001" value="-0.070" required>
+                <small class="help-text">Typical range: -0.1 to 0.1</small>
+            </div>
+
+            <div class="form-group">
+                <label for="delta_gdp">Delta GDP (GDP Growth):</label>
+                <input type="number" id="delta_gdp" name="delta_gdp" value="425" required>
+                <small class="help-text">Typical range: 300 to 800</small>
+            </div>
+
+            <div class="form-group">
+                <label for="delta_electricity">Delta Electricity (Electricity Cost Change):</label>
+                <input type="number" id="delta_electricity" name="delta_electricity" step="0.001" value="0.048" required>
+                <small class="help-text">Typical range: -0.1 to 0.1</small>
+            </div>
+
+            <div class="form-group">
+                <label for="delta_labor">Delta Labor (Labor Cost Change):</label>
+                <input type="number" id="delta_labor" name="delta_labor" value="8000" required>
+                <small class="help-text">Typical range: 7000 to 13000</small>
+            </div>
+
+            <div class="form-group">
+                <label for="inflation">Inflation Rate:</label>
+                <input type="number" id="inflation" name="inflation" step="0.0001" value="0.0043" required>
+                <small class="help-text">Typical range: 0.001 to 0.1</small>
+            </div>
+        </div>
+
+        <div style="width: 100%;">
+            <button type="submit" class="predict-button">Predict Rate</button>
+        </div>
+    </form>
+
+    <div id="prediction-result" style="display: none;">
+        <h3>Predicted Rate Card Value:</h3>
+        <p class="predicted-value">$<span id="rate-value">0.00</span> USD/hour</p>
+        {% if mape %}
+        <p class="mape-info">Model accuracy (MAPE): {{ mape }}%</p>
+        {% endif %}
+    </div>
+
+    <div class="china-predictions">
+        <h3>All Rate Cards for China Region</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Supplier</th>
+                    <th>Role</th>
+                    <th>Experience Level</th>
+                    <th>Predicted Rate (USD/hour)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pred in china_predictions %}
+                <tr>
+                    <td>{{ pred.supplier }}</td>
+                    <td>{{ pred.role }}</td>
+                    <td>{{ pred.experience }}</td>
+                    <td class="rate">${{ pred.predicted_rate }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div id="sources" class="tab-content">
@@ -445,6 +923,31 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).classList.add("active");
     evt.currentTarget.classList.add("active");
+}
+
+function predictRate(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('rate-prediction-form');
+    const formData = new FormData(form);
+    
+    fetch('/predict_rate', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('rate-value').textContent = data.predicted_rate;
+            document.getElementById('prediction-result').style.display = 'block';
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while making the prediction.');
+    });
 }
 </script>
 

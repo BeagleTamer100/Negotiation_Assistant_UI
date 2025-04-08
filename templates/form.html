@@ -1,81 +1,255 @@
-<div class="form-wrapper">
-    <form action="/submit" method="post">
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <h1>Johnson and Johnson Negotiation Assistant</h1>
-        <div class="form-container">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
 
-            <div class="form-group">
-                <label for="subcategory">Subcategory:</label>
-                <select id="subcategory" name="subcategory" required>
-                    <option value="" disabled selected>Select One</option>
-                    {% for sub in subcategory_list %}
-                    <option value="{{ sub }}">{{ sub }}</option>
-                    {% endfor %}
-                </select>
+    .main-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: scroll;
+    }
+
+    .form-wrapper {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .form-container {
+        height: auto;
+        overflow-y: visible;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 10px;
+        color: #1a1a1a;
+    }
+
+    .slider-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .range-slider {
+        flex: 1;
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        border-radius: 4px;
+        background: #e0e0e0;
+        outline: none;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #1a1a1a;
+        cursor: pointer;
+        transition: background .15s ease-in-out;
+    }
+
+    .range-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border: 0;
+        border-radius: 50%;
+        background: #1a1a1a;
+        cursor: pointer;
+        transition: background .15s ease-in-out;
+    }
+
+    .range-value {
+        min-width: 40px;
+        text-align: center;
+        color: #1a1a1a;
+    }
+
+    .select-container select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: white;
+    }
+
+    button {
+        background-color: #1a1a1a;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #333;
+    }
+</style>
+</head>
+<body>
+<div class="main-container">
+    <div class="form-wrapper">
+        <form action="/submit" method="post">
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+            <h1>Johnson and Johnson Negotiation Assistant</h1>
+            <div class="form-container">
+
+                <div class="form-group select-container">
+                    <label for="subcategory">Subcategory:</label>
+                    <select id="subcategory" name="subcategory" required title="Select a subcategory">
+                        <option value="" disabled selected>Select One</option>
+                        {% for sub in subcategory_list %}
+                        <option value="{{ sub }}">{{ sub }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group select-container">
+                    <label for="region">Region:</label>
+                    <select id="region" name="region" required title="Select a region">
+                        <option value="" disabled selected>Select One</option>
+                        {% for option in dropdown_options.get("region", []) %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group select-container">
+                    <label for="sourcing_stage">Sourcing Stage:</label>
+                    <select id="sourcing_stage" name="sourcing_stage" required title="Select a sourcing stage">
+                        <option value="" disabled selected>Select One</option>
+                        {% for option in dropdown_options.get("sourcing_stage", []) %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <h3>Strategic Importance Assessment</h3>
+                <div class="form-group">
+                    <label for="strategic_q1">This sourcing project makes up a high proportion of the annual purchasing volume (B) of our field</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="strategic_q1" name="strategic_q1" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="strategic_q2">This sourcing project is of high priority to our management</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="strategic_q2" name="strategic_q2" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="strategic_q3">The end customer easily recognizes the quality of the sourced parts</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="strategic_q3" name="strategic_q3" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="strategic_q4">The sourced parts are more important than most other parts in our field</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="strategic_q4" name="strategic_q4" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="strategic_q5">This sourcing project is more important than most other sourcing projects in our field</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="strategic_q5" name="strategic_q5" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <h3>Supply Risk Assessment</h3>
+                <div class="form-group">
+                    <label for="risk_q1">Many alternative suppliers can ensure the supply of parts if the incumbent supplier is eliminated</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="risk_q1" name="risk_q1" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="risk_q2">Prices for this category have been stable over the past 3-5 years</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="risk_q2" name="risk_q2" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="risk_q3">Geopolitical factors do not affect pricing or availability of supply for this category</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="risk_q3" name="risk_q3" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="risk_q4">Suppliers are transparent about their cost structures for this category</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="risk_q4" name="risk_q4" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="risk_q5">Volume commitments and/or long-term contracts can influence pricing</label>
+                    <div class="slider-container">
+                        <input type="range" class="range-slider" id="risk_q5" name="risk_q5" min="1" max="7" value="4" required
+                              title="Rate from 1 (Strongly Disagree) to 7 (Strongly Agree)">
+                        <span class="range-value">4</span>
+                    </div>
+                </div>
+
+                <button type="submit">Generate Strategy</button>
             </div>
-
-            <div class="form-group">
-                <label for="region">Region:</label>
-                <select name="region" required>
-                    <option value="" disabled selected>Select One</option>
-                    {% for option in dropdown_options.get("region", []) %}
-                    <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="sourcing_stage">Sourcing Stage:</label>
-                <select name="sourcing_stage" required>
-                    <option value="" disabled selected>Select One</option>
-                    {% for option in dropdown_options.get("sourcing_stage", []) %}
-                    <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-
-            <div class="form-group">
-                <label for="financial_impact">What is the financial impact of this RFP subcategory?</label>
-                <select name="financial_impact" required>
-                    <option value="" disabled selected>Select One</option>
-                    {% for option in dropdown_options.get("financial_impact", []) %}
-                    <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="supply_risk">What is the supply risk of this subcategory?</label>
-                <select name="supply_risk" required>
-                    <option value="" disabled selected>Select One</option>
-                    {% for option in dropdown_options.get("supply_risk", []) %}
-                    <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="market_volatility">How volatile is the market? (1 = Stable, 5 = Highly Volatile)</label>
-                <select name="market_volatility" required>
-                    <option value="" disabled selected>Select One</option>
-                    {% for option in dropdown_options.get("market_volatility", []) %}
-                    <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="supplier_dependency">How dependent are you on few suppliers? (1 = Many Options, 5 = Single Source)</label>
-                <select name="supplier_dependency" required>
-                    <option value="" disabled selected>Select One</option>
-                    {% for option in dropdown_options.get("supplier_dependency", []) %}
-                    <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <button type="submit">Generate Strategy</button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
+
+<script>
+    // Update range value displays when sliders change
+    document.querySelectorAll('.range-slider').forEach(slider => {
+        const valueDisplay = slider.nextElementSibling;
+        slider.addEventListener('input', () => {
+            valueDisplay.textContent = slider.value;
+        });
+    });
+</script>
+</body>
+</html>
